@@ -1,7 +1,9 @@
-package com.huang.superbracelet;
+package com.huang.superbracelet.activity.home;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.huang.superbracelet.R;
 
 public class MainActivity extends AppCompatActivity {
 
