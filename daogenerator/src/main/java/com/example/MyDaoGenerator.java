@@ -15,6 +15,7 @@ public class MyDaoGenerator {
     }
 
     private static void addNote(Schema schema){
+
         Entity note = schema.addEntity("Note");
         note.setTableName("NOTE");
         note.addIdProperty();
