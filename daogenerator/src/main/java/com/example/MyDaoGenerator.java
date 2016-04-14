@@ -21,5 +21,6 @@ public class MyDaoGenerator {
         note.addStringProperty("text").notNull();
         note.addStringProperty("comment");
         note.addDateProperty("creationDate");
+
     }
 }
