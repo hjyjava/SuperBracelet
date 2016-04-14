@@ -1,4 +1,4 @@
-package com.huang.superbracelet.activity.home;
+package com.huang.superbracelet.base;
 
 /**
  * Created by 黄家远 on 16/4/14.
