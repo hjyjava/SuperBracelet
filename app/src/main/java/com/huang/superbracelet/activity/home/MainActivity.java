@@ -1,39 +1,28 @@
-package com.huang.superbracelet;
+package com.huang.superbracelet.activity.home;
 
-<<<<<<< HEAD
-=======
-import android.app.ListActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AppCompatActivity;
->>>>>>> origin/master
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 
-<<<<<<< HEAD
-import com.huang.superbracelet.R;
-import com.huang.superbracelet.base.BaseActivity;
-
-public class MainActivity extends BaseActivity {
-=======
 import com.huang.dao.DaoMaster;
 import com.huang.dao.DaoSession;
 import com.huang.dao.NoteDao;
-import com.huang.greendao.Note;
+import com.huang.bean.Note;
+import com.huang.superbracelet.R;
+import com.huang.superbracelet.base.BaseActivity;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
->>>>>>> origin/master
 
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 
-public class MainActivity extends ListActivity{
+public class MainActivity extends BaseActivity{
 
     private SQLiteDatabase db;
     private EditText editText;
@@ -61,7 +50,7 @@ public class MainActivity extends ListActivity{
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, from,
                 to);
-        setListAdapter(adapter);
+//        setListAdapter(adapter);
     }
 
     private void openDB(){
@@ -112,17 +101,12 @@ public class MainActivity extends ListActivity{
         }
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        // 删除操作，你可以通过「id」也可以一次性删除所有
-        getNoteDao().deleteByKey(id);
-//        getNoteDao().deleteAll();
-        Log.d(TAG, "Deleted note, ID: " + id);
-        cursor.requery();
-    }
-
-    @Override
-    protected void initWedgit() {
-        super.initWedgit();
-    }
+//    @Override
+//    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        // 删除操作，你可以通过「id」也可以一次性删除所有
+//        getNoteDao().deleteByKey(id);
+////        getNoteDao().deleteAll();
+//        Log.d(TAG, "Deleted note, ID: " + id);
+//        cursor.requery();
+//    }
 }
