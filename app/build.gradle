@@ -31,10 +31,6 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.8'
     compile 'de.greenrobot:greendao:2.1.0'
     compile files('libs/volley-1.0.11.jar')
-<<<<<<< HEAD
-    compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:cardview-v7:24.0.0-alpha1'
     compile 'com.android.support:recyclerview-v7:24.0.0-alpha1'
-=======
->>>>>>> origin/master
 }

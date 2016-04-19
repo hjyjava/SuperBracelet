@@ -1,10 +1,15 @@
 package com.huang.superbracelet.base;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.huang.superbracelet.utils.MyToastUtils;
+import com.huang.superbracelet.utils.NetUtils;
+
 /**
  * Created by 黄家远 on 16/4/14.
  */
-<<<<<<< HEAD
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends AppCompatActivity {
     private int userId;
     private String token;
 
@@ -23,32 +28,29 @@ public class BaseActivity extends AppCompatActivity{
         super.onPause();
     }
 
-    protected void initIntent(){
+    protected void initIntent() {
 
     }
 
-    protected void initIntance(){
+    protected void initIntance() {
 
     }
 
-    protected void initWedgit(){
+    protected void initWedgit() {
 
     }
 
-    protected void initData(){
+    protected void initData() {
 
     }
 
-    protected void initDataFromDB(){
+    protected void initDataFromDB() {
 
     }
 
-    protected void initDataFromHttp(){
-        if(NetUtils.isConnected(this))
-            MyToastUtils.showShort(this,"网络未连接");
-            return;
+    protected void initDataFromHttp() {
+        if (NetUtils.isConnected(this))
+            MyToastUtils.showShort(this, "网络未连接");
+        return;
     }
-=======
-public class BaseActivity {
->>>>>>> origin/master
 }
