@@ -1,14 +1,9 @@
 package com.huang.superbracelet.base;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import com.huang.superbracelet.utils.MyToastUtils;
-import com.huang.superbracelet.utils.NetUtils;
-
 /**
  * Created by 黄家远 on 16/4/14.
  */
+<<<<<<< HEAD
 public class BaseActivity extends AppCompatActivity{
     private int userId;
     private String token;
@@ -53,4 +48,7 @@ public class BaseActivity extends AppCompatActivity{
             MyToastUtils.showShort(this,"网络未连接");
             return;
     }
+=======
+public class BaseActivity {
+>>>>>>> origin/master
 }
