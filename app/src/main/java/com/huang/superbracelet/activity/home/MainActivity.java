@@ -1,29 +1,17 @@
 package com.huang.superbracelet.activity.home;
 
-<<<<<<< HEAD
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-=======
-import android.app.ListActivity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AppCompatActivity;
->>>>>>> origin/master
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-<<<<<<< HEAD
-=======
-import android.widget.ListView;
->>>>>>> origin/master
 
+import com.huang.bean.Note;
 import com.huang.dao.DaoMaster;
 import com.huang.dao.DaoSession;
 import com.huang.dao.NoteDao;
-import com.huang.bean.Note;
 import com.huang.superbracelet.R;
 import com.huang.superbracelet.base.BaseActivity;
 
@@ -113,7 +101,6 @@ public class MainActivity extends BaseActivity{
         }
     }
 
-<<<<<<< HEAD
 //    @Override
 //    protected void onListItemClick(ListView l, View v, int position, long id) {
 //        // 删除操作，你可以通过「id」也可以一次性删除所有
@@ -122,14 +109,12 @@ public class MainActivity extends BaseActivity{
 //        Log.d(TAG, "Deleted note, ID: " + id);
 //        cursor.requery();
 //    }
-=======
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        // 删除操作，你可以通过「id」也可以一次性删除所有
-        getNoteDao().deleteByKey(id);
-//        getNoteDao().deleteAll();
-        Log.d(TAG, "Deleted note, ID: " + id);
-        cursor.requery();
-    }
->>>>>>> origin/master
+//    @Override
+//    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        // 删除操作，你可以通过「id」也可以一次性删除所有
+//        getNoteDao().deleteByKey(id);
+////        getNoteDao().deleteAll();
+//        Log.d(TAG, "Deleted note, ID: " + id);
+//        cursor.requery();
+//    }
 }
