@@ -222,4 +222,16 @@ public class HttpUtils {
         }
         return result;
     }
+
+    public String buildGetUrl(String url,String... strings){
+        for (int i = 0; i < strings.length; i++) {
+            if(i==0){
+//                url.concat(strings[i].)
+            }else{
+
+            }
+            System.out.println(strings[i]);
+        }
+        return url;
+    }
 }

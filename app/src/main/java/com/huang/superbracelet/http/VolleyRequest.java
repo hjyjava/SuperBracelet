@@ -10,6 +10,7 @@ import com.huang.superbracelet.base.MyApplication;
 
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -17,20 +18,21 @@ import java.util.Map;
  */
 public class VolleyRequest {
 
-    public static <T> void request(final MyVolleyListener<T> myVolleyListener,MyRequest myRequest){
-        switch (myRequest.getMyRequestTpye()){
+    public static <T> void request(final MyVolleyListener<T> myVolleyListener, MyRequest myRequest) {
+        buildGetUrl(myRequest);
+        switch (myRequest.getMyRequestTpye()) {
             case STRING:
                 stringRequest(myRequest, new VolleyInterface<T>(myRequest.getContext()) {
                     @Override
                     public void onMySuccess(T result) {
-                        if(myVolleyListener!=null){
+                        if (myVolleyListener != null) {
                             myVolleyListener.onSuccess(result);
                         }
                     }
 
                     @Override
                     public void onMyError(VolleyError volleyError) {
-                        if(myVolleyListener!=null){
+                        if (myVolleyListener != null) {
                             myVolleyListener.onError(volleyError);
                         }
                     }
@@ -108,7 +110,7 @@ public class VolleyRequest {
     private static <T> void jsonArrayRequest(final MyRequest myRequest, VolleyInterface<T> volleyInterface) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(myRequest.getUrl(),
                 volleyInterface.LoadingListener(),
-                volleyInterface.errorListener()){
+                volleyInterface.errorListener()) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 if (myRequest.getMethod() == Method.POST) {
@@ -120,5 +122,26 @@ public class VolleyRequest {
         jsonArrayRequest.setTag(myRequest.getTag());
         MyApplication.getHttpQueues().add(jsonArrayRequest);
         MyApplication.getHttpQueues().start();
+    }
+
+    private static void buildGetUrl(MyRequest myRequest) {
+        if (myRequest.getMethod() == Request.Method.GET) {
+            Map<String, String> params = myRequest.getParams();
+            if (params != null && !params.isEmpty()) {
+                StringBuffer sbu = new StringBuffer();
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    try {
+                        sbu.append(entry.getKey()).append("=")
+                                .append(URLEncoder
+                                        .encode(entry.getValue(), "utf-8").replace(
+                                                "+", "%2B")).append("&");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                myRequest.setUrl(myRequest.getUrl().concat(sbu.toString()));
+            }
+        }
     }
 }

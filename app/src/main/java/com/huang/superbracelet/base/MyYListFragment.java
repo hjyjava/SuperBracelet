@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,9 +28,8 @@ import java.util.List;
 /**
  * Created by 黄家远 on 16/4/19.
  */
-public class MyYListFragment extends BaseFragment implements YListView.IXListViewListener {
+public abstract class MyYListFragment extends BaseFragment implements YListView.IXListViewListener {
 
-    private RelativeLayout mainLayout;
     //主YListView
     protected YListView main_ylv;
     // 提示内容
@@ -66,21 +64,18 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case 0:// 获取失败
+                case 0:// 没有网络
                     loadfailed(0);
                     break;
-                case 1:// 获取成功
-                    loadSuccessful();
+                case 1:// 获取失败
+                    loadfailed(1);
                     break;
-                case 4:// 获取失败，没有网络
-                    loadfailed(4);
-                    break;
-                case 7://删除成功
+                case 2://删除成功
                     Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
                     gotoLoading();
                     loadData(1);
                     break;
-                case 8://删除失败
+                case 3://删除失败
                     Toast.makeText(mContext, "删除失败", Toast.LENGTH_SHORT).show();
                     gotoLoading();
                     loadData(1);
@@ -96,34 +91,23 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
         super.onCreate(savedInstanceState);
         broadcastManager = LocalBroadcastManager.getInstance(getActivity());
         myUpdateRb = new MyUpdateRb();
-
         receiveFlag = YLIST_UPDATE;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mainLayout == null) {
-            mainLayout = (RelativeLayout) inflater.inflate(R.layout.my_collection_essay, null);
-            initWidget();
-        } else {
-            ViewGroup parent = (ViewGroup) mainLayout.getParent();
-            if (parent != null) {
-                parent.removeView(mainLayout);
-            }
-        }
-        return mainLayout;
+    protected View buildMainView(LayoutInflater inflater) {
+        return inflater.inflate(R.layout.my_ylistview_layout, null);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         gotoLoading();
-        loadRequest(1);
+        loadData(1);
     }
 
     @Override
     protected void initWidget() {
-        super.initWidget();
         main_ylv = (YListView) mainLayout.findViewById(R.id.main_ylv);
         rl_nodata = (RelativeLayout) mainLayout.findViewById(R.id.nodata_layout);
         progressBar = (ProgressBar) mainLayout.findViewById(R.id.loading_pb);
@@ -141,12 +125,11 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
         rl_nodata.setVisibility(View.VISIBLE);
         none.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-        if (types == 4) {
+        if (types == 0) {
             none.setText("检查网络！");
         } else {
             none.setText("暂无数据！");
         }
-        loadResponse(false);
     }
 
     /**
@@ -167,7 +150,6 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
             main_ylv.setPullLoadEnable(true, true);
         }
         allList.addAll(newList);
-        loadResponse(true);
     }
 
     /**
@@ -186,8 +168,8 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
      * @param page 1为首次加载或刷新操作,大于1为加载更多
      */
     protected void loadData(int page) {
-        if (NetUtils.isConnected(mContext)) {// 没网络
-            myHandler.sendEmptyMessage(4);
+        if (!NetUtils.isConnected(mContext)) {// 没网络
+            myHandler.sendEmptyMessage(0);
             if (page == 1) {
                 main_ylv.stopRefresh();
             } else {
@@ -196,56 +178,27 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
             return;
         }
         mPage = page;
+        realLoadData();
     }
+
+    protected abstract void realLoadData();
 
     @Override
     public void onRefresh() {
-        loadRequest(1);
+        loadData(1);
     }
 
     @Override
     public void onLoadMore() {
-        loadRequest(++mPage);
-    }
-
-    /**
-     * 数据加载及加载成功接口
-     */
-    private OnLoadDataListener mOnLoadDataListener;
-
-    public interface OnLoadDataListener {
-        void isSuccess(boolean b);
-        void toLoadData(int page);
-    }
-
-    public void setOnLoadDataListener(OnLoadDataListener onLoadDataListener) {
-        this.mOnLoadDataListener = onLoadDataListener;
-    }
-
-    /**
-     * 加载结果判断
-     * @param b
-     */
-    private void loadResponse(boolean b) {
-        if (mOnLoadDataListener != null) {
-            mOnLoadDataListener.isSuccess(b);
-        }
-    }
-
-    /**
-     * 请求加载
-     * @param page
-     */
-    private void loadRequest(int page) {
-        if (mOnLoadDataListener != null) {
-            mOnLoadDataListener.toLoadData(page);
-        }
+        loadData(++mPage);
     }
 
     /**
      * 删除弹窗
      */
     protected void deleteDialogShow() {
+        if(getActivity()==null)
+            return;
         new AlertDialog.Builder(getActivity())
                 .setTitle("是否删除所选内容？")
                 .setPositiveButton("删除", new DialogInterface.OnClickListener() {
@@ -303,7 +256,7 @@ public class MyYListFragment extends BaseFragment implements YListView.IXListVie
     class MyUpdateRb extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadRequest(1);
+            loadData(1);
         }
     }
 }

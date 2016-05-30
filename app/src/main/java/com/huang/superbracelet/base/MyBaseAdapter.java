@@ -44,6 +44,7 @@ public abstract class MyBaseAdapter<VH extends BaseViewHoler, T> extends BaseAda
         VH viewHolder;
         if (convertView == null) {
             viewHolder = onCreateViewHolder(parent);
+            convertView = viewHolder.getmRoot();
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (VH) convertView.getTag();
@@ -56,11 +57,4 @@ public abstract class MyBaseAdapter<VH extends BaseViewHoler, T> extends BaseAda
 
     protected abstract void onBindViewHolder(VH vh, int position);
 
-//    public class ViewHolder {
-//        protected View root;
-//
-//        public ViewHolder(int layout_id) {
-//            root = mInflater.inflate(layout_id, null);
-//        }
-//    }
 }

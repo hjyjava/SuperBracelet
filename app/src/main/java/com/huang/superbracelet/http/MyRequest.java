@@ -12,7 +12,7 @@ import java.util.Map;
 public class MyRequest {
 
     private Context context;
-    private int method = Request.Method.POST;
+    private int method = Request.Method.GET;
     private String url;
     private String tag;
     private MyRequestTpye myRequestTpye = MyRequestTpye.STRING;

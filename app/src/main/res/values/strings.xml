@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SuperBracelet</string>
+    <string name="app_name">考试管理</string>
 
     <!-- 下拉刷新 -->
     <string name="dataformat">HH:mm:ss</string>

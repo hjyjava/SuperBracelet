@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:descendantFocusability="blocksDescendants">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:id="@+id/gate_iv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/exam_unlocked_icon" />
+
+        <TextView
+            android:id="@+id/gate_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="1"
+            android:textColor="@color/top_bg"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/red_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/gate_iv"
+            android:layout_marginRight="5dp">
+
+            <ImageView
+                android:id="@+id/red_iv"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/btn_gate_ic_red" />
+
+            <TextView
+                android:id="@+id/red_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="1"
+                android:textColor="#ffffff"
+                android:textSize="9sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

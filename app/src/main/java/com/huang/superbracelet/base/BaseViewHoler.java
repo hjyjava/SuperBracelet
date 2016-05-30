@@ -5,11 +5,15 @@ import android.view.View;
 /**
  * Created by 黄家远 on 16/5/4.
  */
-public class BaseViewHoler {
+public abstract class BaseViewHoler {
 
-    private View mRoot;
+    protected View mRoot;
 
-    public BaseViewHoler(View root) {
+    public BaseViewHoler(View root){
         mRoot = root;
+    }
+
+    public View getmRoot() {
+        return mRoot;
     }
 }

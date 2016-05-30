@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingLeft="15dp"
+    android:paddingTop="10dp">
+
+    <ImageView
+        android:id="@+id/select_iv"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_answer_nomal"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/flag_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="A."
+                android:textColor="@color/top_bg"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/content_tv"
+                style="@style/txt_14sp_9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="罗杰斯来得及佛山的那份拉丝机地方拉松岛风景区沃恩来看vxncvxzncvkajspdofiqjwe滴答滴答滴答滴答滴答滴答滴答滴答滴答滴答滴答滴答答" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/content_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_zz_list"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>
