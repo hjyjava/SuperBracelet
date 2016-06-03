@@ -14,7 +14,7 @@ import com.huang.bean.Student;
 /** 
  * DAO for table "Student".
 */
-public class StudentDao extends AbstractDao<Student, Void> {
+public class StudentDao extends AbstractDao<Student, String> {
 
     public static final String TABLENAME = "Student";
 
@@ -23,7 +23,7 @@ public class StudentDao extends AbstractDao<Student, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, String.class, "Id", false, "ID");
+        public final static Property Id = new Property(0, String.class, "Id", true, "ID");
         public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
         public final static Property Xingming = new Property(2, String.class, "xingming", false, "XINGMING");
         public final static Property Xuehao = new Property(3, String.class, "xuehao", false, "XUEHAO");
@@ -48,7 +48,7 @@ public class StudentDao extends AbstractDao<Student, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"Student\" (" + //
-                "\"ID\" TEXT NOT NULL ," + // 0: Id
+                "\"ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: Id
                 "\"USERNAME\" TEXT," + // 1: username
                 "\"XINGMING\" TEXT," + // 2: xingming
                 "\"XUEHAO\" TEXT," + // 3: xuehao
@@ -108,8 +108,8 @@ public class StudentDao extends AbstractDao<Student, Void> {
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
@@ -141,15 +141,18 @@ public class StudentDao extends AbstractDao<Student, Void> {
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(Student entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected String updateKeyAfterInsert(Student entity, long rowId) {
+        return entity.getId();
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(Student entity) {
-        return null;
+    public String getKey(Student entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

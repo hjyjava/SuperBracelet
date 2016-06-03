@@ -36,6 +36,7 @@
         <activity android:name=".activity.exam.ExamGridActivity"/>
         <activity android:name=".activity.exam.ExamMainActivity"/>
         <activity android:name=".activity.exam.AnswerExamActivity"/>
+        <activity android:name=".activity.exam.ScoreActivity"/>
     </application>
 
 </manifest>

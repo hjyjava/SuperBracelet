@@ -36,6 +36,10 @@ public class Student {
     public Student() {
     }
 
+    public Student(String Id) {
+        this.Id = Id;
+    }
+
     public Student(String Id, String username, String xingming, String xuehao, String nianji, String banji, String xingbie) {
         this.Id = Id;
         this.username = username;

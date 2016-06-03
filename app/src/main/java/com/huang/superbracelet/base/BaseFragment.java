@@ -3,7 +3,6 @@ package com.huang.superbracelet.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,7 @@ public abstract class BaseFragment extends Fragment {
     protected String childSubjectId;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             mContext = getActivity();
@@ -38,9 +37,8 @@ public abstract class BaseFragment extends Fragment {
         childSubjectId = (String) spUtils.get("ChildSubjectId", "");
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mainLayout == null) {
             mainLayout = buildMainView(inflater);
             initWidget();
@@ -57,20 +55,19 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void initWidget();
 
-    protected void saveStudentToSp(Student student){
+
+    protected void saveStudentToSp(Student student) {
         spUtils.put("studentId", student.getId());
     }
 
-    protected void removeStudent(String studentId){
+    protected void removeStudent(String studentId) {
         spUtils.remove("studentId");
     }
 
-    protected void saveChildSubjectId(ChildSubject childSubject){
+    protected void saveChildSubjectId(ChildSubject childSubject) {
         spUtils.put("ChildSubjectId", childSubject.getId());
     }
-
-    protected void removeChildSubjectId(String childSubjectId){
+    protected void removeChildSubjectId(String childSubjectId) {
         spUtils.remove("ChildSubjectId");
     }
-
 }

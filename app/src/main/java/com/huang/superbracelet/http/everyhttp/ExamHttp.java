@@ -4,16 +4,21 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.huang.bean.Jindu;
 import com.huang.bean.ParentSubject;
 import com.huang.bean.Student;
+import com.huang.superbracelet.bean.exam.ExamGrade;
 import com.huang.superbracelet.bean.exam.Examlist;
+import com.huang.superbracelet.bean.exam.GateState;
+import com.huang.superbracelet.bean.exam.ExamRanking;
 import com.huang.superbracelet.common.constant.UrlConstant;
 import com.huang.superbracelet.http.MyGlobalHttp;
 import com.huang.superbracelet.http.MyRequest;
 import com.huang.superbracelet.http.MyVolleyListener;
 import com.huang.superbracelet.http.VolleyRequest;
+import com.huang.superbracelet.utils.Base64Util;
 import com.huang.superbracelet.utils.Md5Util;
 
 import java.util.HashMap;
@@ -83,6 +88,7 @@ public class ExamHttp extends MyGlobalHttp {
 
     /**
      * 获取题目
+     *
      * @param type
      * @param num
      * @param myVolleyListener
@@ -111,10 +117,11 @@ public class ExamHttp extends MyGlobalHttp {
 
     /**
      * 获取答题进度
+     *
      * @param studentId
      * @param childSubjectId
      */
-    public void getJindu(String studentId,String childSubjectId, final MyVolleyListener<Jindu> myVolleyListener) {
+    public void getJindu(String studentId, String childSubjectId, final MyVolleyListener<Jindu> myVolleyListener) {
         MyRequest myRequest = new MyRequest();
         myRequest.setContext(mContext);
         Map<String, String> params = new HashMap<>();
@@ -125,7 +132,99 @@ public class ExamHttp extends MyGlobalHttp {
         VolleyRequest.request(new MyVolleyListener<String>() {
             @Override
             public void onSuccess(String s) {
-                myVolleyListener.onSuccess(JSON.parseObject(s,Jindu.class));
+                myVolleyListener.onSuccess(JSON.parseObject(s, Jindu.class));
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                myVolleyListener.onError(volleyError);
+            }
+        }, myRequest);
+    }
+
+    /**
+     * 提交分数
+     *
+     * @param childSubjectId
+     * @param studentId
+     * @param grade          考试得分
+     * @param zongfen        总分
+     * @param num            考试关数
+     */
+    public void submitScore(String childSubjectId, String studentId, String grade, String zongfen, String num, final MyVolleyListener<Boolean> myVolleyListener) {
+        MyRequest myRequest = new MyRequest();
+        myRequest.setContext(mContext);
+
+        String cGrade = Base64Util.encode(grade);
+        String cZongfen = Base64Util.encode(zongfen);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("Cid", childSubjectId);
+        params.put("userid", studentId);
+        params.put("grade", cGrade);
+        params.put("zongfen", cZongfen);
+        params.put("num", num);
+        myRequest.setParams(params);
+        myRequest.setUrl(UrlConstant.KAOSHI_INSERT_GRADE);
+        VolleyRequest.request(new MyVolleyListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                JSONObject jsonObject = JSON.parseObject(s);
+                myVolleyListener.onSuccess(jsonObject.getInteger("status") == 0);
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                myVolleyListener.onError(volleyError);
+            }
+        }, myRequest);
+    }
+
+    /**
+     * 获取错题列表(未答)
+     * @param studentId
+     * @param childSubjectId
+     * @param myVolleyListener
+     */
+    public void getErrorList(String studentId, String childSubjectId, final MyVolleyListener<List<GateState>> myVolleyListener) {
+        MyRequest myRequest = new MyRequest();
+        myRequest.setContext(mContext);
+        Map<String, String> params = new HashMap<>();
+        params.put("Cid", childSubjectId);
+        params.put("userid", studentId);
+        myRequest.setParams(params);
+        myRequest.setUrl(UrlConstant.KAOSHI_ERRORLIST_W);
+        VolleyRequest.request(new MyVolleyListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                myVolleyListener.onSuccess(JSON.parseArray(s, GateState.class));
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                myVolleyListener.onError(volleyError);
+            }
+        }, myRequest);
+    }
+
+    /**
+     * 获取每关分数列表
+     * @param studentId
+     * @param childSubjectId
+     * @param myVolleyListener
+     */
+    public void getGradeList(String studentId, String childSubjectId, final MyVolleyListener<List<ExamGrade>> myVolleyListener){
+        MyRequest myRequest = new MyRequest();
+        myRequest.setContext(mContext);
+        Map<String, String> params = new HashMap<>();
+        params.put("Cid", childSubjectId);
+        params.put("userid", studentId);
+        myRequest.setParams(params);
+        myRequest.setUrl(UrlConstant.KAOSHI_GRADE_SHOW);
+        VolleyRequest.request(new MyVolleyListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                myVolleyListener.onSuccess(JSONArray.parseArray(s,ExamGrade.class));
             }
 
             @Override
@@ -135,8 +234,30 @@ public class ExamHttp extends MyGlobalHttp {
         },myRequest);
     }
 
-    //TODO 回答题目
-    public void answerQuestion() {
+    /**
+     * 获取排行列表
+     * @param studentId
+     * @param childSubjectId
+     * @param myVolleyListener
+     */
+    public void getRinkingList(String studentId, String childSubjectId, final MyVolleyListener<ExamRanking> myVolleyListener){
+        MyRequest myRequest = new MyRequest();
+        myRequest.setContext(mContext);
+        Map<String, String> params = new HashMap<>();
+        params.put("Cid", childSubjectId);
+        params.put("userid", studentId);
+        myRequest.setParams(params);
+        myRequest.setUrl(UrlConstant.KAOSHI_GRADE_LIST);
+        VolleyRequest.request(new MyVolleyListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                myVolleyListener.onSuccess(JSON.parseObject(s,ExamRanking.class));
+            }
 
+            @Override
+            public void onError(VolleyError volleyError) {
+                myVolleyListener.onError(volleyError);
+            }
+        },myRequest);
     }
 }

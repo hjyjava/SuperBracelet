@@ -1,7 +1,7 @@
 package com.huang.superbracelet.base;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 
 import com.huang.bean.ChildSubject;
 import com.huang.bean.Student;
@@ -12,11 +12,12 @@ import com.huang.superbracelet.utils.SPUtils;
 /**
  * Created by 黄家远 on 16/4/14.
  */
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends FragmentActivity {
     protected SPUtils spUtils;
 
     protected String studentId;
     protected String childSubjectId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

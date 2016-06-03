@@ -25,9 +25,10 @@
                 android:id="@+id/question_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textSize="14sp"
-                android:textColor="#29b8ee" />
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#494949" />
 
             <com.huang.superbracelet.view.MyListView
                 android:id="@+id/question_mly"

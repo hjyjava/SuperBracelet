@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.huang.superbracelet.R;
+import com.huang.superbracelet.activity.exam.fragment.ExamHomeFragment;
+import com.huang.superbracelet.activity.exam.fragment.ExamRankingFragment;
 import com.huang.superbracelet.adapter.exam.AnswerExamAdapter;
 import com.huang.superbracelet.base.BaseActivity;
 import com.huang.superbracelet.bean.exam.Exam;
@@ -15,6 +17,7 @@ import com.huang.superbracelet.bean.exam.Examlist;
 import com.huang.superbracelet.http.MyVolleyListener;
 import com.huang.superbracelet.http.everyhttp.ExamHttp;
 import com.huang.superbracelet.utils.MyToastUtils;
+import com.huang.superbracelet.utils.RefreshUtil;
 import com.huang.superbracelet.view.MyListView;
 
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ import java.util.List;
 public class AnswerExamActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView top_left_iv;
-    private TextView top_title_tv;
+    private TextView top_title_tv, top_right_tv;
 
     private MyListView question_mly;
     private LinearLayout parse_layout;
@@ -35,7 +38,7 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
 
     private ExamHttp examHttp;
     private int gatePosition;
-    private int examPosition;
+    private int examPosition = 1;
     private int answerPosition;
 
     private List<Exam> mExams = new ArrayList<>();
@@ -70,11 +73,13 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
     protected void initWedgit() {
         super.initWedgit();
         top_title_tv = (TextView) findViewById(R.id.top_title_tv);
-        int gateNum = gatePosition++;
-        top_title_tv.setText("第" + gateNum + "关");
+        top_title_tv.setText("第" + ++gatePosition + "关");
         top_left_iv = (ImageView) findViewById(R.id.top_left_iv);
         top_left_iv.setVisibility(View.VISIBLE);
         top_left_iv.setOnClickListener(this);
+
+        top_right_tv = (TextView) findViewById(R.id.top_right_tv);
+        top_right_tv.setVisibility(View.VISIBLE);
 
         question_tv = (TextView) findViewById(R.id.question_tv);
         question_mly = (MyListView) findViewById(R.id.question_mly);
@@ -94,6 +99,12 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(Examlist examlist) {
                 mExams = examlist.getExamlist();
+                if (mExams == null || mExams.size() == 0) {
+                    MyToastUtils.showShort(AnswerExamActivity.this, "暂无题目,敬请期待");
+                    next_gate_tv.setVisibility(View.GONE);
+                    top_right_tv.setVisibility(View.GONE);
+                    return;
+                }
                 buildQuestion();
             }
 
@@ -105,9 +116,8 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
     }
 
     private void buildQuestion() {
-        if (mExams == null || mExams.size() == 0)
-            return;
-        currentExam = mExams.get(examPosition);
+        currentExam = mExams.get(examPosition - 1);
+        top_right_tv.setText(examPosition + "/" + mExams.size());
         if (currentExam == null)
             return;
         mAnswerList = currentExam.getAnswers();
@@ -115,7 +125,7 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
             return;
         //TODO 多选题待处理
         try {
-            answerPosition = Integer.valueOf(mAnswerList.get(0));
+            answerPosition = Integer.valueOf(mAnswerList.get(0)) - 1;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,7 +134,7 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
             answerExamAdapter = new AnswerExamAdapter(this, mAnswerList, answerPosition);
             question_mly.setAdapter(answerExamAdapter);
         }
-        question_tv.setText(currentExam.getQuestionText());
+        question_tv.setText(examPosition + "." + currentExam.getQuestionText());
         right_answer_tv.setText(AnswerExamAdapter.flagArray[answerPosition]);
         parse_tv.setText(currentExam.getAnalysis());
 
@@ -136,7 +146,6 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
                 }
                 answerExamAdapter.notifyDataSetChanged();
                 parse_layout.setVisibility(View.VISIBLE);
-                MyToastUtils.showShort(AnswerExamActivity.this, isRight ? "回答正确" : "回答错误");
             }
         });
     }
@@ -150,6 +159,8 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
             case R.id.next_gate_tv:
                 if (answerExamAdapter != null && answerExamAdapter.isAsked()) {
                     nextPosition();
+                }else{
+                    MyToastUtils.showShort(AnswerExamActivity.this, "请先答完此题");
                 }
                 break;
             default:
@@ -158,16 +169,37 @@ public class AnswerExamActivity extends BaseActivity implements View.OnClickList
     }
 
     private void nextPosition() {
-        if (mExams != null) {
-            if (examPosition < mExams.size() - 1) {
-                parse_layout.setVisibility(View.GONE);
-                examPosition++;
-                buildQuestion();
-                answerExamAdapter.changeDatas(mAnswerList, answerPosition);
-            } else {
-                MyToastUtils.showShort(AnswerExamActivity.this, "已答完本关所有题目,共" + errorExams.size() + "道错题");
-                finish();
+        if (examPosition < mExams.size()) {
+            parse_layout.setVisibility(View.GONE);
+            ++examPosition;
+            if (examPosition == mExams.size()) {
+                next_gate_tv.setText("提交本关");
             }
+            buildQuestion();
+            answerExamAdapter.changeDatas(mAnswerList, answerPosition);
+        } else {
+            submitScore();
         }
+    }
+
+    private void submitScore() {
+        final int grade = mExams.size() - errorExams.size();
+        examHttp.submitScore(childSubjectId, studentId, grade + "", mExams.size() + "", gatePosition + "", new MyVolleyListener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                if (aBoolean) {
+                    MyToastUtils.showShort(AnswerExamActivity.this, "提交分数成功,共"+mExams.size()+"题,答对"+grade+"题");
+                    RefreshUtil.getIntance(AnswerExamActivity.this).send(ExamHomeFragment.class);
+                    RefreshUtil.getIntance(AnswerExamActivity.this).send(ExamRankingFragment.class);
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+
+            }
+        });
     }
 }

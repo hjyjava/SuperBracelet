@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -53,11 +52,6 @@ public class HomeActivity extends BaseActivity {
         home_dl = (DrawerLayout) findViewById(R.id.home_dl);
         home_tl = (TabLayout) findViewById(R.id.home_tl);
         home_vp = (ViewPager) findViewById(R.id.home_vp);
-
-        setSupportActionBar(home_toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         home_nv.setNavigationItemSelectedListener(naviListener);
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.huang.dao.DaoMaster;
-import com.huang.dao.StudentDao;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -43,21 +42,21 @@ public class MyDevOpenHelper extends DaoMaster.OpenHelper {
     public static class V1Migration implements Migration {
         @Override
         public void migrate(SQLiteDatabase db) {
-            db.execSQL("ALTER TABLE" + StudentDao.TABLENAME + "ADD COLUMN width");
+//            db.execSQL("ALTER TABLE" + StudentDao.TABLENAME + "ADD COLUMN width");
         }
     }
 
     public static class V2Migration implements Migration {
         @Override
         public void migrate(SQLiteDatabase db) {
-            db.execSQL("ALTER TABLE" + StudentDao.TABLENAME + "ADD COLUMN height");
+//            db.execSQL("ALTER TABLE" + StudentDao.TABLENAME + "ADD COLUMN height");
         }
     }
 
     public static class V3Migration implements Migration {
         @Override
         public void migrate(SQLiteDatabase db) {
-            db.execSQL("ALTER TABLE" + StudentDao.TABLENAME + "ADD COLUMN boothom");
+//            db.execSQL("ALTER TABLE" + StudentDao.TABLENAME + "ADD COLUMN boothom");
         }
     }
 }

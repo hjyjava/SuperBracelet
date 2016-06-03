@@ -8,12 +8,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.huang.superbracelet.R;
 import com.huang.superbracelet.adapter.exam.ExamGridAdapter;
 import com.huang.superbracelet.base.BaseActivity;
 import com.huang.superbracelet.bean.exam.ExamGate;
+import com.huang.superbracelet.bean.exam.GateState;
+import com.huang.superbracelet.http.MyVolleyListener;
 import com.huang.superbracelet.http.everyhttp.ExamHttp;
 import com.huang.superbracelet.listener.RVItemClickListener;
+import com.huang.superbracelet.utils.MyToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +25,19 @@ import java.util.List;
 /**
  * Created by 黄家远 on 16/5/25.
  */
-public class ExamGridActivity extends BaseActivity implements View.OnClickListener{
+public class ExamGridActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView top_left_iv;
     private TextView top_title_tv;
     private RecyclerView exams_rv;
 
     private String maxGateNum;
-    private String jinduNum;
     private ExamHttp examHttp;
+    private int askNum;
+
+    private ExamGridAdapter examGridAdapter;
+
+    private boolean isChuangGuan = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +46,14 @@ public class ExamGridActivity extends BaseActivity implements View.OnClickListen
         initIntance();
         initIntent();
         initWedgit();
-        initData();
+        updateGate();
     }
 
     @Override
     protected void initIntent() {
         super.initIntent();
         maxGateNum = getIntent().getStringExtra("maxGateNum");
-        jinduNum = getIntent().getStringExtra("jinduNum");
+        askNum = getIntent().getIntExtra("jinduNum", -1);
     }
 
     @Override
@@ -68,40 +76,55 @@ public class ExamGridActivity extends BaseActivity implements View.OnClickListen
         exams_rv.setLayoutManager(layoutManager);
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-        final List<ExamGate> examGateList = new ArrayList<>();
-        int gateNum = Integer.valueOf(maxGateNum);
-        int askNum = Integer.valueOf(jinduNum);
-        for (int i = 0; i < gateNum; i++) {
-            ExamGate examGate = new ExamGate();
-            if (i <= askNum) {
-                examGate.setAsked(true);
-                examGate.setErrorNum(i * 2 + 3);
-            }
-            examGate.setUserid(studentId);
-            examGate.setGrade(23 + "");
-            examGate.setZongfen(100 + "");
-            examGate.setCid(childSubjectId);
-            examGateList.add(examGate);
-        }
-        ExamGridAdapter examGridAdapter = new ExamGridAdapter(this, examGateList);
-        examGridAdapter.setRvItemClickListener(new RVItemClickListener() {
+    private void updateGate() {
+        examHttp.getErrorList(studentId, childSubjectId, new MyVolleyListener<List<GateState>>() {
             @Override
-            public void onItemClick(View view, int position) {
-                ExamGate examGate = examGateList.get(position);
-                Intent intent = new Intent(ExamGridActivity.this,AnswerExamActivity.class);
-                intent.putExtra("gatePosition",position);
-                startActivity(intent);
+            public void onSuccess(List<GateState> gateStates) {
+                final List<ExamGate> examGateList = new ArrayList<>();
+                int gateNum = Integer.valueOf(maxGateNum);
+                for (int i = 0; i < gateNum; i++) {
+                    ExamGate examGate = new ExamGate();
+                    for (int j = 0; j < gateStates.size(); j++) {
+                        if(i == gateStates.get(j).getRounds()){
+                            examGate.setErrorNum(gateStates.get(j).getNumA());
+                        }
+                    }
+                    if (i <= askNum) {
+                        examGate.setAsked(true);
+                    }
+                    examGateList.add(examGate);
+                }
+                if(examGridAdapter==null){
+                    examGridAdapter = new ExamGridAdapter(ExamGridActivity.this, examGateList);
+                    exams_rv.setAdapter(examGridAdapter);
+                    examGridAdapter.setRvItemClickListener(new RVItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            if(position>askNum){
+                                MyToastUtils.showShort(ExamGridActivity.this, "本关还未解锁");
+                                return;
+                            }
+                            isChuangGuan = (position==askNum);
+                            Intent intent = new Intent(ExamGridActivity.this, AnswerExamActivity.class);
+                            intent.putExtra("gatePosition", position);
+                            startActivityForResult(intent, 0);
+                        }
+                    });
+                }else{
+                    examGridAdapter.update(examGateList);
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+
             }
         });
-        exams_rv.setAdapter(examGridAdapter);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.top_left_iv:
                 finish();
                 break;
@@ -109,6 +132,25 @@ public class ExamGridActivity extends BaseActivity implements View.OnClickListen
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 0:
+                    if(isChuangGuan){
+                        askNum++;
+                    }
+                    updateGate();
+                    break;
+                case 1:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

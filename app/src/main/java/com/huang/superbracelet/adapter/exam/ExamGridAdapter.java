@@ -13,6 +13,7 @@ import com.huang.superbracelet.R;
 import com.huang.superbracelet.bean.exam.ExamGate;
 import com.huang.superbracelet.listener.RVItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,13 +23,19 @@ public class ExamGridAdapter extends RecyclerView.Adapter<ExamGridAdapter.MyView
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<ExamGate> mExamGateList;
+    private List<ExamGate> mExamGateList = new ArrayList<>();
     private RVItemClickListener mRvItemClickListener;
 
     public ExamGridAdapter(Context context, List<ExamGate> examGateList) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(mContext);
         this.mExamGateList = examGateList;
+    }
+
+    public void update(List<ExamGate> examGateList){
+        mExamGateList.clear();
+        this.mExamGateList = examGateList;
+        notifyDataSetChanged();
     }
 
     public void setRvItemClickListener(RVItemClickListener rvItemClickListener) {

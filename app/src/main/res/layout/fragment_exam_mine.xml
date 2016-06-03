@@ -1,54 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#eeeeee"
+    android:scrollbars="none">
 
-    <TextView
-        android:id="@+id/username_tv"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/xingming_tv"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/contact_detail_bg">
 
-    <TextView
-        android:id="@+id/xuehao_tv"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical" />
+            <com.huang.superbracelet.view.CircleHeadView
+                android:id="@+id/user_header_chv"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_centerInParent="true"
+                app:border_color="@color/white"
+                app:border_width="2dp"
+                android:src="@drawable/default_contacts" />
 
-    <TextView
-        android:id="@+id/nianji_tv"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical" />
+            <TextView
+                android:id="@+id/username_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_header_chv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#3b3b3b" />
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/banji_tv"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical" />
+        <RelativeLayout
+            android:id="@+id/me_withMe"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/me_item_onclick">
 
-    <TextView
-        android:id="@+id/xingbie_tv"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical" />
-</LinearLayout>
+            <ImageView
+                android:id="@+id/me_withMe_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dip"
+                android:background="@drawable/me_aboutme" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:textColor="#2c2c2c"
+                android:text="姓名"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/xingming_tv"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:gravity="right"
+                android:maxWidth="200dp"
+                android:layout_marginRight="15dp"
+                android:lines="1"
+                android:textColor="#535353"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="1px"
+            android:id="@+id/me_shield"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/me_item_onclick">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dip"
+                android:background="@drawable/me_share" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:textColor="#2c2c2c"
+                android:text="性别"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/xingbie_tv"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:gravity="right"
+                android:maxWidth="200dp"
+                android:layout_marginRight="15dp"
+                android:lines="1"
+                android:textColor="#535353"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="8dp"
+            android:id="@+id/me_shoucang"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/me_item_onclick">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dip"
+                android:background="@drawable/me_shoucang" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:textColor="#2c2c2c"
+                android:text="学号"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/xuehao_tv"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:gravity="right"
+                android:maxWidth="200dp"
+                android:layout_marginRight="15dp"
+                android:lines="1"
+                android:textColor="#535353"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="1px"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/me_item_onclick">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dip"
+                android:background="@drawable/me_schedule" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:textColor="#2c2c2c"
+                android:text="年级"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/nianji_tv"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:gravity="right"
+                android:maxWidth="200dp"
+                android:layout_marginRight="15dp"
+                android:lines="1"
+                android:textColor="#535353"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="1px"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/me_item_onclick">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dip"
+                android:background="@drawable/me_help" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:textColor="#2c2c2c"
+                android:text="班级"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/banji_tv"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="45dp"
+                android:gravity="right"
+                android:maxWidth="200dp"
+                android:layout_marginRight="15dp"
+                android:lines="1"
+                android:textColor="#535353"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/quite_bt"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="25dp"
+            android:background="@drawable/me_bg_exist"
+            android:text="退出登录"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+    </LinearLayout>
+</ScrollView>

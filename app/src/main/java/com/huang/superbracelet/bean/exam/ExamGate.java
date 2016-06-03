@@ -8,8 +8,6 @@ import java.io.Serializable;
 public class ExamGate implements Serializable{
     private String Cid;
     private String userid;
-    private String grade;
-    private String zongfen;
     private String num;
     private boolean isAsked;
     private int errorNum;
@@ -20,14 +18,6 @@ public class ExamGate implements Serializable{
 
     public void setCid(String cid) {
         Cid = cid;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
     }
 
     public String getNum() {
@@ -44,14 +34,6 @@ public class ExamGate implements Serializable{
 
     public void setUserid(String userid) {
         this.userid = userid;
-    }
-
-    public String getZongfen() {
-        return zongfen;
-    }
-
-    public void setZongfen(String zongfen) {
-        this.zongfen = zongfen;
     }
 
     public int getErrorNum() {
